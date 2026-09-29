@@ -1,0 +1,93 @@
+/* HOME */
+.hero{text-align:center;padding:14px 0 10px;}
+.hero h1{font-family:'Righteous',sans-serif;font-size:clamp(26px,7vw,44px);line-height:1;background:linear-gradient(135deg,var(--gold),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero p{color:var(--muted);margin-top:5px;font-size:13px;}
+.welcome-chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;margin-bottom:12px;}
+
+/* DAILY CHALLENGE BANNER */
+.daily-banner{background:linear-gradient(135deg,rgba(240,192,64,.12),rgba(0,212,170,.08));border:1px solid rgba(240,192,64,.3);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.daily-info h3{font-family:'Righteous',sans-serif;font-size:15px;color:var(--gold);}
+.daily-info p{font-size:11px;color:var(--muted);margin-top:2px;}
+.daily-timer{font-family:'Righteous',sans-serif;font-size:12px;color:var(--accent);text-align:right;}
+.btn-daily{background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:10px;color:#0d1117;font-family:'Righteous',sans-serif;font-size:13px;padding:8px 14px;cursor:pointer;white-space:nowrap;}
+.btn-daily:disabled{opacity:.5;cursor:not-allowed;}
+
+/* CHEST BANNER */
+.chest-banner{background:linear-gradient(135deg,rgba(188,140,255,.1),rgba(88,166,255,.08));border:1px solid rgba(188,140,255,.25);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;}
+.chest-banner:hover{border-color:var(--purple);}
+.chest-icon{font-size:32px;animation:float 2s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.chest-info h3{font-family:'Righteous',sans-serif;font-size:14px;color:var(--purple);}
+.chest-info p{font-size:11px;color:var(--muted);margin-top:1px;}
+.chest-timer{font-family:'Righteous',sans-serif;font-size:11px;color:var(--purple);margin-left:auto;white-space:nowrap;}
+
+/* MODE GRID */
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0;}
+.mode-btn{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:14px 12px;cursor:pointer;text-align:center;transition:all .2s;font-family:'Nunito',sans-serif;}
+.mode-btn:hover{border-color:var(--accent);transform:translateY(-2px);}
+.mode-icon{font-size:26px;display:block;margin-bottom:5px;}
+.mode-name{font-size:12px;font-weight:800;color:var(--text);}
+.mode-desc{font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* CATEGORY GRID */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0;}
+.cat-btn{background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:11px 8px;cursor:pointer;text-align:center;transition:all .2s;font-family:'Nunito',sans-serif;}
+.cat-btn:hover{border-color:var(--accent);transform:translateY(-2px);}
+.cat-btn.selected{border-color:var(--accent);background:var(--glow);}
+.cat-icon{font-size:20px;display:block;margin-bottom:3px;}
+.cat-name{font-size:10px;font-weight:700;color:var(--text);}
+
+/* QUIZ */
+.quiz-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.q-counter{font-size:12px;color:var(--muted);font-weight:700;}
+.q-score{font-size:12px;color:var(--gold);font-weight:800;}
+.q-mode-tag{font-size:10px;padding:2px 8px;border-radius:8px;font-weight:700;}
+.q-mode-tag.solo{background:rgba(0,212,170,.15);color:var(--accent);}
+.q-mode-tag.survival{background:rgba(255,77,109,.15);color:var(--red);}
+.q-mode-tag.daily{background:rgba(240,192,64,.15);color:var(--gold);}
+.q-mode-tag.duel{background:rgba(88,166,255,.15);color:var(--blue);}
+.progress-bar{height:5px;background:var(--surface2);border-radius:3px;margin-bottom:14px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--blue));border-radius:3px;transition:width .4s ease;}
+.question-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:11px;}
+.q-cat{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--purple);margin-bottom:6px;}
+.q-text{font-size:16px;font-weight:700;line-height:1.5;}
+.options{display:flex;flex-direction:column;gap:8px;}
+.option{background:var(--surface);border:2px solid var(--border);border-radius:11px;padding:12px 14px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;color:var(--text);text-align:left;transition:all .2s;}
+.option:hover:not(:disabled){border-color:var(--blue);background:rgba(88,166,255,.06);}
+.option.correct{border-color:var(--green);background:rgba(63,185,80,.12);color:var(--green);}
+.option.wrong{border-color:var(--red);background:rgba(255,77,109,.08);color:var(--red);}
+.option:disabled{cursor:default;}
+.quiz-footer{display:flex;justify-content:space-between;align-items:center;margin-top:11px;gap:8px;}
+.btn-ll{background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--gold);font-family:'Nunito',sans-serif;font-weight:700;font-size:11px;padding:8px 10px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:4px;}
+.btn-ll:hover:not(:disabled){border-color:var(--gold);}
+.btn-ll:disabled{opacity:.4;cursor:not-allowed;}
+.timer-ring{width:44px;height:44px;position:relative;flex-shrink:0;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:4;}
+.timer-ring .bg{stroke:var(--surface2);}
+.timer-ring .fg{stroke:var(--accent);stroke-dasharray:126;stroke-linecap:round;transition:stroke-dashoffset .1s,stroke .5s;}
+.timer-ring .num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:800;font-size:13px;}
+
+/* SURVIVAL */
+.survival-streak{text-align:center;margin-bottom:10px;}
+.survival-streak .num{font-family:'Righteous',sans-serif;font-size:36px;color:var(--red);}
+.survival-streak .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
+
+/* DUEL */
+.duel-header{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:12px;}
+.duel-player{text-align:center;flex:1;}
+.duel-player .av{font-size:28px;display:block;}
+.duel-player .name{font-size:12px;font-weight:700;margin-top:4px;}
+.duel-player .score{font-family:'Righteous',sans-serif;font-size:22px;color:var(--gold);}
+.duel-vs{font-family:'Righteous',sans-serif;font-size:18px;color:var(--muted);padding:0 10px;}
+.duel-turn{text-align:center;font-size:11px;color:var(--accent);font-weight:700;margin-bottom:10px;padding:5px;background:var(--glow);border-radius:8px;}
+
+/* RESULT */
+.result-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;margin:10px 0;}
+.result-emoji{font-size:50px;margin-bottom:8px;}
+.result-title{font-family:'Righteous',sans-serif;font-size:24px;margin-bottom:3px;}
+.result-sub{color:var(--muted);font-size:13px;margin-bottom:14px;}
+.result-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.stat-box{background:var(--surface2);border-radius:10px;padding:10px;}
+.stat-val{font-family:'Righteous',sans-serif;font-size:19px;color:var(--gold);}
+.stat-lbl{font-size:10px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.05em;}

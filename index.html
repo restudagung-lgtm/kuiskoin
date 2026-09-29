@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KuisKoin">
+<meta name="theme-color" content="#00d4aa">
+<meta name="description" content="Game kuis trivia seru dengan sistem rank, trophy, dan koin virtual!">
+<title>KuisKoin</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230d1117'/><text x='50%25' y='54%25' font-size='110' text-anchor='middle' dominant-baseline='middle'>🎯</text></svg>">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- CSS -->
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/auth.css">
+<link rel="stylesheet" href="css/game.css">
+<link rel="stylesheet" href="css/panels.css">
+<link rel="stylesheet" href="css/base.css">
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<!-- LOADING OVERLAY -->
+<div id="fbLoading" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,.9);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:14px;">
+  <div style="width:44px;height:44px;border:3px solid #30363d;border-top-color:#00d4aa;border-radius:50%;animation:spin .8s linear infinite"></div>
+  <div style="color:#e6edf3;font-size:14px;font-weight:700;font-family:Nunito,sans-serif" id="fbLoadingMsg">Menghubungkan...</div>
+</div>
+<!-- ONLINE/OFFLINE STATUS -->
+<div id="fbStatusBar" style="display:none;padding:5px 14px;text-align:center;font-size:12px;font-weight:700;"></div>
+<div class="app">
+
+<!-- PWA INSTALL BANNER -->
+<div id="installBanner" style="display:none;background:linear-gradient(90deg,#1a2a1e,#1a1f2e);border-bottom:1px solid var(--border);padding:10px 14px;display:none;align-items:center;gap:10px;">
+  <span style="font-size:22px">📲</span>
+  <div style="flex:1">
+    <div style="font-weight:800;font-size:13px">Install KuisKoin</div>
+    <div style="font-size:11px;color:var(--muted)">Tambah ke layar utama HP kamu!</div>
+  </div>
+  <button onclick="installApp()" style="background:var(--accent);border:none;border-radius:8px;color:#0d1117;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;padding:7px 12px;cursor:pointer;">Install</button>
+  <button onclick="dismissInstall()" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px;">✕</button>
+</div>
+
+<!-- OFFLINE INDICATOR -->
+<div id="offlineBar" style="display:none;background:#2a1a08;border-bottom:1px solid #e6a81740;padding:6px 14px;text-align:center;font-size:12px;color:var(--gold);">
+  📡 Kamu sedang offline — game tetap bisa dimainkan!
+</div>
+
+<nav>
+  <div class="logo">Kuis<span>Koin</span></div>
+  <div class="nav-r" id="navR" style="display:none">
+    <div class="lives-row" id="livesRow"></div>
+    <div class="coin-pill">🪙<span id="coinCount">0</span></div>
+    <button class="btn-av" id="btnAv" onclick="showS('sProfile');setNav('profile')"></button>
+  </div>
+</nav>
+
+<!-- AUTH -->
+<div class="screen active" id="sAuth">
+  <div class="auth-wrap">
+    <div><div class="auth-logo"><span class="k">KUIS</span><span class="k2">KOIN</span></div><div class="auth-tag">Jawab kuis · Raih trophy · Buka peti hadiah!</div></div>
+    <div class="auth-card">
+      <div class="auth-tabs"><button class="auth-tab active" onclick="switchTab('login')">Masuk</button><button class="auth-tab" onclick="switchTab('register')">Daftar</button></div>
+      <div id="fLogin">
+        <div class="af"><label>Username</label><input type="text" id="lUser" placeholder="Username..." autocomplete="username"></div>
+        <div class="af">
+          <label>Password</label>
+          <div class="pass-wrap">
+            <input type="password" id="lPass" placeholder="Password..." autocomplete="current-password">
+            <button type="button" class="btn-eye" onclick="togglePass('lPass','lEye')" id="lEye">👁️</button>
+          </div>
+        </div>
+        <div class="auth-err" id="lErr"></div>
+        <button class="btn-p" onclick="doLogin()">MASUK →</button>
+      </div>
+      <div id="fReg" style="display:none">
+        <div class="af"><label>Username</label><input type="text" id="rUser" placeholder="Buat username..." maxlength="20" autocomplete="username"></div>
+        <div class="af">
+          <label>Password</label>
+          <div class="pass-wrap">
+            <input type="password" id="rPass" placeholder="Buat password..." autocomplete="new-password">
+            <button type="button" class="btn-eye" onclick="togglePass('rPass','rEye')" id="rEye">👁️</button>
+          </div>
+        </div>
+        <div class="af"><label>Pilih Avatar</label><div class="av-pick" id="avPick"></div></div>
+        <div class="auth-err" id="rErr"></div>
+        <button class="btn-p" onclick="doRegister()">DAFTAR →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="screen" id="sHome">
+  <div class="hero"><div class="welcome-chip" id="welcomeChip">👋 Halo!</div><h1>MAIN KUIS</h1><p>Pilih mode dan kategori favoritmu!</p></div>
+  <div id="dailyBanner"></div>
+  <div id="chestBanner"></div>
+  <div class="sec-title">Mode Permainan</div>
+  <div class="mode-grid">
+    <button class="mode-btn" onclick="selectMode('solo')"><span class="mode-icon">🎯</span><span class="mode-name">Solo</span><span class="mode-desc">10 soal standar</span></button>
+    <button class="mode-btn" onclick="selectMode('survival')"><span class="mode-icon">💀</span><span class="mode-name">Survival</span><span class="mode-desc">Jawab sampai salah</span></button>
+    <button class="mode-btn" onclick="selectMode('duel')"><span class="mode-icon">⚔️</span><span class="mode-name">Duel Lokal</span><span class="mode-desc">2 pemain, 1 HP</span></button>
+    <button class="mode-btn" onclick="selectMode('daily')"><span class="mode-icon">📅</span><span class="mode-name">Challenge Harian</span><span class="mode-desc">Soal khusus setiap hari</span></button>
+  </div>
+  <div class="sec-title" id="catLabel">Pilih Kategori</div>
+  <div class="cat-grid" id="catGrid"></div>
+  <button class="btn-p" id="btnStart" onclick="startGame()">▶ MULAI</button>
+  <button class="btn-s" onclick="showS('sLB');setNav('lb')">🏆 Leaderboard</button>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="sQuiz">
+  <div class="quiz-header">
+    <span class="q-counter" id="qCounter">Soal 1/10</span>
+    <span class="q-mode-tag solo" id="qModeTag">SOLO</span>
+    <span class="q-score" id="qScore">🪙 0</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div id="survivalStreak"></div>
+  <div id="duelHeader"></div>
+  <div id="duelTurn"></div>
+  <div class="question-card"><div class="q-cat" id="qCat">—</div><div class="q-text" id="qText">Memuat...</div></div>
+  <div class="options" id="optsCont"></div>
+  <div class="quiz-footer">
+    <button class="btn-ll" id="btnSkip" onclick="useSkip()">⏭ Skip<span style="color:var(--muted);font-size:9px">(50🪙)</span></button>
+    <div class="timer-ring"><svg width="44" height="44" viewBox="0 0 50 50"><circle class="bg" cx="25" cy="25" r="20"/><circle class="fg" id="timerC" cx="25" cy="25" r="20" stroke-dashoffset="0"/></svg><span class="num" id="timerN">15</span></div>
+    <button class="btn-ll" onclick="openShop()">🛒 Toko</button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="screen" id="sResult">
+  <div class="result-card">
+    <div class="result-emoji" id="rEmoji">🏆</div>
+    <div class="result-title" id="rTitle">Hebat!</div>
+    <div class="result-sub" id="rSub">Kamu menjawab dengan baik!</div>
+    <div class="result-stats">
+      <div class="stat-box"><div class="stat-val" id="rCorrect">0</div><div class="stat-lbl">Benar</div></div>
+      <div class="stat-box"><div class="stat-val" id="rScore">0</div><div class="stat-lbl">Skor</div></div>
+      <div class="stat-box"><div class="stat-val" id="rCoins">+0</div><div class="stat-lbl">Koin</div></div>
+    </div>
+    <div id="rRankChange"></div>
+    <div class="sec-title">🎖 Badge</div>
+    <div class="badges-grid" id="rBadges"></div>
+  </div>
+  <button class="btn-p" onclick="startGame()">🔄 Main Lagi</button>
+  <button class="btn-s" onclick="showS('sTrophy');setNav('trophy')">🏅 Trophy</button>
+  <button class="btn-s" onclick="showS('sHome');setNav('home')">🏠 Home</button>
+</div>
+
+<!-- RANK SCREEN -->
+<div class="screen" id="sRank">
+  <div class="page-title">⚔️ Rank <button onclick="showS('sProfile');setNav('profile')">✕</button></div>
+  <div id="rankCard"></div>
+  <div class="sec-title">Semua Rank</div>
+  <div id="rankTiers"></div>
+</div>
+
+<!-- TROPHY -->
+<div class="screen" id="sTrophy">
+  <div class="page-title">🏅 Trophy <button onclick="showS('sHome');setNav('home')">✕</button></div>
+  <div class="sec-title" style="color:var(--gold)">Klaim trophy untuk koin & unlock tema!</div>
+  <div class="trophy-list" id="trophyList"></div>
+</div>
+
+<!-- TEMA -->
+<div class="screen" id="sTheme">
+  <div class="page-title">🎨 Tema <button onclick="showS('sProfile');setNav('profile')">✕</button></div>
+  <div class="sec-title">Beli & pakai tema baru!</div>
+  <div class="theme-grid" id="themeGrid"></div>
+</div>
+
+<!-- LB -->
+<div class="screen" id="sLB">
+  <div class="page-title">🏆 Leaderboard <button onclick="showS('sHome');setNav('home')">✕</button></div>
+  <div class="lb-list" id="lbList"></div>
+</div>
+
+<!-- PROFILE -->
+<div class="screen" id="sProfile">
+  <div class="page-title">👤 Profil</div>
+  <div class="profile-header" id="profHeader"></div>
+  <div class="sec-title">Statistik Umum</div>
+  <div class="profile-stats" id="profStats"></div>
+  <div class="sec-title">📊 Statistik Per Kategori</div>
+  <div id="catStats"></div>
+  <div class="sec-title">🎖 Badge</div>
+  <div class="badges-grid" id="profBadges" style="margin-bottom:12px"></div>
+  <div class="sec-title">📋 Riwayat (10 terakhir)</div>
+  <div class="history-list" id="profHistory"></div>
+  <button class="btn-s" onclick="showS('sTheme');setNav('theme')" style="margin-top:4px">🎨 Ganti Tema</button>
+  <button class="btn-s" onclick="showS('sRank');setNav('rank')" style="margin-top:4px">⚔️ Lihat Rank Saya</button>
+  <button class="btn-s" onclick="toggleSound()" id="btnSound" style="margin-top:4px">🔊 Suara: ON</button>
+  <div id="devBtnWrap"></div>
+  <button class="btn-logout" onclick="doLogout()">🚪 Keluar</button>
+</div>
+
+<!-- DEV PANEL SCREEN -->
+<div class="screen" id="sDev">
+  <div class="page-title">🛠️ Developer Panel <button onclick="showS('sProfile');setNav('profile')">✕</button></div>
+  <div id="devVerifyWrap">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:12px;">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">🔐 Masukkan kode developer untuk akses panel</div>
+      <div class="af">
+        <label>Kode Developer</label>
+        <div class="pass-wrap">
+          <input type="password" id="devCodeInput" placeholder="Masukkan kode rahasia...">
+          <button type="button" class="btn-eye" onclick="togglePass('devCodeInput','devCodeEye')" id="devCodeEye">👁️</button>
+        </div>
+      </div>
+      <div class="auth-err" id="devCodeErr"></div>
+      <button class="btn-p" onclick="verifyDevCode()" style="margin-top:8px">🔓 Verifikasi</button>
+    </div>
+  </div>
+  <div id="devPanelContent" style="display:none"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav" id="bottomNav" style="display:none">
+  <button class="bnav-btn active" id="nav-home" onclick="showS('sHome');setNav('home')"><span class="icon">🏠</span>Home</button>
+  <button class="bnav-btn" id="nav-rank" onclick="showS('sRank');setNav('rank')"><span class="icon">⚔️</span>Rank</button>
+  <button class="bnav-btn" id="nav-trophy" onclick="showS('sTrophy');setNav('trophy')"><span class="icon">🏅</span>Trophy</button>
+  <button class="bnav-btn" id="nav-lb" onclick="showS('sLB');setNav('lb')"><span class="icon">🏆</span>Ranking</button>
+  <button class="bnav-btn" id="nav-profile" onclick="showS('sProfile');setNav('profile')"><span class="icon">👤</span>Profil</button>
+</div>
+</div>
+
+<!-- SHOP MODAL -->
+<div class="modal-overlay" id="shopModal">
+  <div class="modal">
+    <h2>🛒 Toko Koin</h2><p>Tukar koin untuk power-up!</p>
+    <div class="shop-items">
+      <div class="shop-item"><div class="shop-item-info"><span class="shop-item-icon">❤️</span><div><div class="shop-item-name">Tambah Nyawa</div><div class="shop-item-desc">+1 nyawa ekstra</div></div></div><button class="btn-buy" onclick="buyItem('life')">80🪙</button></div>
+      <div class="shop-item"><div class="shop-item-info"><span class="shop-item-icon">⚡</span><div><div class="shop-item-name">+10 Detik</div><div class="shop-item-desc">Soal berikutnya</div></div></div><button class="btn-buy" onclick="buyItem('time')">40🪙</button></div>
+      <div class="shop-item"><div class="shop-item-info"><span class="shop-item-icon">🔍</span><div><div class="shop-item-name">50/50</div><div class="shop-item-desc">Hapus 2 jawaban salah</div></div></div><button class="btn-buy" onclick="buyItem('5050')">60🪙</button></div>
+    </div>
+    <button class="btn-close" onclick="closeShop()">Tutup</button>
+  </div>
+</div>
+
+<!-- CHEST MODAL -->
+<div class="modal-overlay" id="chestModal">
+  <div class="modal" style="text-align:center">
+    <h2>🎁 Peti Hadiah</h2>
+    <p>Peti hadiah gratis setiap 8 jam!</p>
+    <div id="chestContent"></div>
+    <button class="btn-close" onclick="closeChest()" style="margin-top:12px">Tutup</button>
+  </div>
+</div>
+
+<!-- TROPHY POPUP -->
+<div class="trophy-popup" id="trophyPopup">
+  <div class="trophy-popup-inner">
+    <span class="tp-icon" id="tpIcon">🏅</span>
+    <div class="tp-title" id="tpTitle">Trophy Baru!</div>
+    <div class="tp-sub" id="tpSub">Kamu berhasil meraih trophy!</div>
+    <div class="tp-reward" id="tpReward">+200 🪙</div>
+    <button class="btn-p" onclick="closeTrophyPopup()">Keren! ✨</button>
+  </div>
+</div>
+
+<!-- RANK UP POPUP -->
+<div class="rank-up-popup" id="rankUpPopup">
+  <div class="rank-up-inner">
+    <div class="rank-up-from" id="ruFrom">Iron → Bronze</div>
+    <span class="rank-up-icon" id="ruIcon">🥉</span>
+    <div class="rank-up-title" id="ruTitle">RANK UP!</div>
+    <div class="rank-up-sub" id="ruSub">Selamat, kamu naik rank!</div>
+    <button class="btn-p" onclick="closeRankUp()">Lanjutkan! 🔥</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- JavaScript — urutan penting! -->
+<script src="js/config.js"></script>
+<script src="js/constants.js"></script>
+<script src="js/questions.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/home.js"></script>
+<script src="js/game.js"></script>
+<script src="js/shop.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/dev.js"></script>
+<script src="js/rank.js"></script>
+<script src="js/firebase.js"></script>
+<script src="js/pwa.js"></script>
+<script src="js/init.js"></script>
+</body>
+</html>

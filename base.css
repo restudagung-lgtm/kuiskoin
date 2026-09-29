@@ -1,0 +1,10 @@
+/* MISC */
+.toast{position:fixed;top:65px;left:50%;transform:translateX(-50%) translateY(-10px);background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:7px 15px;font-weight:700;font-size:12px;opacity:0;transition:all .3s;z-index:250;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.sec-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;}
+.page-title{font-family:'Righteous',sans-serif;font-size:22px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.page-title button{background:none;border:none;color:var(--muted);font-size:17px;cursor:pointer;}
+@keyframes pop{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+.pop{animation:pop .3s ease;}
+.divider{height:1px;background:var(--border);margin:14px 0;}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}

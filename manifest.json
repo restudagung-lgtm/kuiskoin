@@ -1,0 +1,43 @@
+{
+  "name": "KuisKoin - Game Trivia",
+  "short_name": "KuisKoin",
+  "description": "Game kuis trivia seru dengan sistem rank, trophy, dan koin virtual!",
+  "start_url": "./kuiskoin_v4.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d1117",
+  "theme_color": "#00d4aa",
+  "lang": "id",
+  "categories": ["games", "education"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230d1117'/><text x='50%' y='54%' font-size='110' text-anchor='middle' dominant-baseline='middle'>🎯</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%230d1117'/><text x='50%' y='54%' font-size='300' text-anchor='middle' dominant-baseline='middle'>🎯</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Main Solo",
+      "short_name": "Solo",
+      "description": "Langsung main mode solo",
+      "url": "./kuiskoin_v4.html#solo",
+      "icons": [{"src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><text y='.9em' font-size='90'>🎯</text></svg>", "sizes": "96x96"}]
+    },
+    {
+      "name": "Challenge Harian",
+      "short_name": "Daily",
+      "description": "Main challenge harian",
+      "url": "./kuiskoin_v4.html#daily",
+      "icons": [{"src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><text y='.9em' font-size='90'>📅</text></svg>", "sizes": "96x96"}]
+    }
+  ]
+}
