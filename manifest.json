@@ -2,7 +2,7 @@
   "name": "KuisKoin - Game Trivia",
   "short_name": "KuisKoin",
   "description": "Game kuis trivia seru dengan sistem rank, trophy, dan koin virtual!",
-  "start_url": "./kuiskoin_v4.html",
+  "start_url": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0d1117",

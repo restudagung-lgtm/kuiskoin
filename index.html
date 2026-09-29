@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#00d4aa">
 <meta name="description" content="Game kuis trivia seru dengan sistem rank, trophy, dan koin virtual!">
 <title>KuisKoin</title>
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="json/manifest.json">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230d1117'/><text x='50%25' y='54%25' font-size='110' text-anchor='middle' dominant-baseline='middle'>🎯</text></svg>">
 
 <!-- Google Fonts -->
@@ -281,22 +281,41 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- JavaScript — urutan penting! -->
-<script src="js/config.js"></script>
-<script src="js/constants.js"></script>
-<script src="js/questions.js"></script>
-<script src="js/storage.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/ui.js"></script>
-<script src="js/home.js"></script>
-<script src="js/game.js"></script>
-<script src="js/shop.js"></script>
-<script src="js/profile.js"></script>
-<script src="js/audio.js"></script>
-<script src="js/dev.js"></script>
-<script src="js/rank.js"></script>
-<script src="js/firebase.js"></script>
-<script src="js/pwa.js"></script>
+
+<!-- JavaScript — load order matters! -->
+
+<!-- 1. CORE — dasar utilitas -->
+<script src="js/core/config.js"></script>
+<script src="js/core/constants.js"></script>
+<script src="js/core/questions.js"></script>
+<script src="js/core/storage.js"></script>
+
+<!-- 2. AUTH — login & session (lokal) -->
+<script src="js/auth/auth.js"></script>
+
+<!-- 3. UI — tampilan & interaksi -->
+<script src="js/ui/ui.js"></script>
+
+<!-- 4. GAME — logika permainan -->
+<script src="js/game/home.js"></script>
+<script src="js/game/game.js"></script>
+<script src="js/game/shop.js"></script>
+
+<!-- 5. UI helpers lanjutan -->
+<script src="js/ui/profile.js"></script>
+<script src="js/ui/audio.js"></script>
+
+<!-- 6. FEATURES — fitur tambahan -->
+<script src="js/features/rank.js"></script>
+<script src="js/features/dev.js"></script>
+
+<!-- 7. PWA -->
+<script src="js/pwa/pwa.js"></script>
+
+<!-- 8. SERVER — Firebase (override auth lokal) -->
+<script src="js/server/firebase.js"></script>
+
+<!-- 9. INIT — inisialisasi (paling akhir) -->
 <script src="js/init.js"></script>
 </body>
 </html>

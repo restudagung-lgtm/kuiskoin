@@ -3,13 +3,12 @@
 // ═══════════════════════════════════════════════════════
 
 var FIREBASE_CONFIG = {
-   apiKey: "AIzaSyBWEPgW8fpHte6xU4XfM3XMXDRLu1BGjt8",
-  authDomain: "kuiskoin.firebaseapp.com",
-  projectId: "kuiskoin",
-  storageBucket: "kuiskoin.firebasestorage.app",
-  messagingSenderId: "1023003281263",
-  appId: "1:1023003281263:web:56a7a247de273963cd4a9a",
-  measurementId: "G-VHBYJEVQZR"
+  apiKey:            "ISI_API_KEY_KAMU",
+  authDomain:        "ISI_PROJECT_ID.firebaseapp.com",
+  projectId:         "ISI_PROJECT_ID",
+  storageBucket:     "ISI_PROJECT_ID.appspot.com",
+  messagingSenderId: "ISI_MESSAGING_SENDER_ID",
+  appId:             "ISI_APP_ID"
 };
 
 // Init Firebase
